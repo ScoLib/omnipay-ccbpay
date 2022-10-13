@@ -15,6 +15,8 @@ class Signer
 
     protected $sort = true;
 
+    protected $filter = true;
+
     protected $encodePolicy = self::ENCODE_POLICY_QUERY;
 
     /**
@@ -27,23 +29,26 @@ class Signer
         $this->params = $params;
     }
 
-    public function signWithDES($key, $md5Key)
+    public function signWithDES($key)
     {
-        $content = $this->getContentToSign();
+        $content = $this->getContentToMac();
 
-        $md5Str = $content . $md5Key;
+        $md5Str = $content . '20120315201809041004';
         $mac = md5($md5Str);
-        $content .= '&SIGN=' . $mac;
 
-        $content = mb_convert_encoding($content, 'UTF-16BE', 'utf-8');
+        $str = $this->encodeParams($this->params);
 
-        $content = hex2bin('FEFF' . bin2hex($content)); // BOM
+        $str .= '&SIGN=' . $mac;
+
+        $str = mb_convert_encoding($str, 'UTF-16BE', 'utf-8');
+
+        $str = hex2bin('FEFF' . bin2hex($str)); // BOM
 
         return urlencode(
             str_replace(
                 '+',
                 ',',
-                $this->encrypt($content, $this->convertKey($key))
+                $this->encrypt($str, $this->convertKey($key))
             )
         );
     }
@@ -68,10 +73,15 @@ class Signer
     }
 
 
-    public function getContentToSign()
+    public function getContentToMac()
     {
-        $params = $this->getParamsToSign();
+        $params = $this->getParamsToMac();
 
+        return $this->encodeParams($params);
+    }
+
+    private function encodeParams($params)
+    {
         if ($this->encodePolicy == self::ENCODE_POLICY_QUERY) {
             return urldecode(http_build_query($params));
         } elseif ($this->encodePolicy == self::ENCODE_POLICY_JSON) {
@@ -85,13 +95,15 @@ class Signer
     /**
      * @return mixed
      */
-    public function getParamsToSign()
+    public function getParamsToMac()
     {
         $params = $this->params;
 
         $this->unsetKeys($params);
 
-        $params = $this->filter($params);
+        if ($this->filter) {
+            $params = $this->filter($params);
+        }
 
         if ($this->sort) {
             $this->sort($params);
