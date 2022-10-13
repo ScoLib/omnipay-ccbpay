@@ -22,7 +22,6 @@ class Signer
      */
     private $params;
 
-
     public function __construct(array $params = [])
     {
         $this->params = $params;
