@@ -31,14 +31,9 @@ class Signer
 
     public function signWithDES($key)
     {
-        $content = $this->getContentToMac();
-
-        $md5Str = $content . '20120315201809041004';
-        $mac = md5($md5Str);
-
         $str = $this->encodeParams($this->params);
 
-        $str .= '&SIGN=' . $mac;
+        $str .= '&SIGN=' . $this->signMac();
 
         $str = mb_convert_encoding($str, 'UTF-16BE', 'utf-8');
 
@@ -51,6 +46,14 @@ class Signer
                 $this->encrypt($str, $this->convertKey($key))
             )
         );
+    }
+
+    public function signMac()
+    {
+        $content = $this->getContentToMac();
+
+        $md5Str = $content . '20120315201809041004';
+        return md5($md5Str);
     }
 
     private function pkcs5Pad($text, $blocksize)
