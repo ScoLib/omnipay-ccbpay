@@ -39,10 +39,14 @@ abstract class BaseAbstractRequest extends AbstractRequest
 
         $body = http_build_query($data);
 
-        $response = $this->httpClient->request('POST', $this->getEndpoint(), $headers, $body)->getBody();
-        // $payload  = Helper::xml2array($response);
 
-        return $response;
+        $response = $this->httpClient->request('POST', $this->getEndpoint(), $headers, $body)->getBody();
+        if (strpos($response, '</html>')) {
+            $payload = ['html' => (string)$response];
+        } else {
+            $payload = (string)$response;
+        }
+        return $payload;
     }
 
     /**
@@ -104,4 +108,39 @@ abstract class BaseAbstractRequest extends AbstractRequest
         return $this->setParameter('MERCHANTID', $value);
     }
 
+    /**
+     * @return mixed
+     */
+    public function getPosId()
+    {
+        return $this->getParameter('POSID');
+    }
+
+    /**
+     * @param $value
+     *
+     * @return $this
+     */
+    public function setPosId($value)
+    {
+        return $this->setParameter('POSID', $value);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBranchId()
+    {
+        return $this->getParameter('BRANCHID');
+    }
+
+    /**
+     * @param $value
+     *
+     * @return $this
+     */
+    public function setBranchId($value)
+    {
+        return $this->setParameter('BRANCHID', $value);
+    }
 }

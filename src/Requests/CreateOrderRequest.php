@@ -37,7 +37,7 @@ class CreateOrderRequest extends BaseAbstractRequest
 
         $data = $this->parameters->all();
 
-        $data['MAC'] = (new Signer($data))->setIgnores(['Mrch_url'])->signMac();
+        $data['MAC'] = (new Signer(http_build_query($data)))->setIgnores(['Mrch_url'])->signMac();
 
         return $data;
     }

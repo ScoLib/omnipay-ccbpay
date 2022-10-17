@@ -8,30 +8,25 @@ use Exception;
  */
 class Signer
 {
-    const ENCODE_POLICY_QUERY = 'QUERY';
-    const ENCODE_POLICY_JSON = 'JSON';
-
     protected $ignores = ['SIGN'];
 
     protected $sort = true;
 
     protected $filter = true;
 
-    protected $encodePolicy = self::ENCODE_POLICY_QUERY;
-
     /**
-     * @var array
+     * @var string
      */
     private $params;
 
-    public function __construct(array $params = [])
+    public function __construct(string $params)
     {
         $this->params = $params;
     }
 
     public function signWithDES($key)
     {
-        $str = $this->encodeParams($this->params);
+        $str = $this->params;
 
         $str .= '&SIGN=' . $this->signMac();
 
@@ -75,32 +70,19 @@ class Signer
         return base64_encode($data);
     }
 
-
     public function getContentToMac()
     {
         $params = $this->getParamsToMac();
 
-        return $this->encodeParams($params);
+        return http_build_query($params);
     }
-
-    private function encodeParams($params)
-    {
-        if ($this->encodePolicy == self::ENCODE_POLICY_QUERY) {
-            return urldecode(http_build_query($params));
-        } elseif ($this->encodePolicy == self::ENCODE_POLICY_JSON) {
-            return json_encode($params);
-        } else {
-            return null;
-        }
-    }
-
 
     /**
      * @return mixed
      */
     public function getParamsToMac()
     {
-        $params = $this->params;
+        parse_str($this->params, $params);
 
         $this->unsetKeys($params);
 
@@ -126,7 +108,6 @@ class Signer
         }
     }
 
-
     /**
      * @return array
      */
@@ -134,7 +115,6 @@ class Signer
     {
         return $this->ignores;
     }
-
 
     /**
      * @param array $ignores
@@ -148,12 +128,10 @@ class Signer
         return $this;
     }
 
-
     private function filter($params)
     {
         return array_filter($params, 'strlen');
     }
-
 
     /**
      * @param $params
@@ -189,19 +167,6 @@ class Signer
     public function setSort($sort)
     {
         $this->sort = $sort;
-
-        return $this;
-    }
-
-
-    /**
-     * @param int $encodePolicy
-     *
-     * @return Signer
-     */
-    public function setEncodePolicy($encodePolicy)
-    {
-        $this->encodePolicy = $encodePolicy;
 
         return $this;
     }
