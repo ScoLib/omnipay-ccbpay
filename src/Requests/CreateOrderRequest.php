@@ -69,6 +69,9 @@ class CreateOrderRequest extends BaseAbstractRequest
             $data['Mrch_url'] = $mrchUrl;
         }
 
+        $data['REMARK1'] = urlencode($data['REMARK1']);
+        $data['REMARK2'] = urlencode($data['REMARK2']);
+        
         return $data;
     }
 
