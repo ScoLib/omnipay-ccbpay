@@ -10,7 +10,7 @@ use Omnipay\Common\Message\AbstractRequest;
 
 abstract class BaseAbstractRequest extends AbstractRequest
 {
-    protected $endpoint = 'https://ch5.dcep.ccb.com/CCBIS/ccbMain_XM?CCB_IBSVersion=V6';
+    protected $endpoint = 'https://ch5.dcep.ccb.com/CCBIS/ccbMain_XM';
     private   $privateKey;
 
     /**
@@ -37,11 +37,13 @@ abstract class BaseAbstractRequest extends AbstractRequest
             'Content-Type' => 'application/x-www-form-urlencoded'
         ];
 
+        $data = array_merge(['CCB_IBSVersion' => 'V6'], $data);
+
         $body = http_build_query($data);
 
-
         $response = $this->httpClient->request('POST', $this->getEndpoint(), $headers, $body)->getBody();
-        if (strpos($response, '</html>')) {
+
+        if (stripos($response, '</html>')) {
             $payload = ['html' => (string)$response];
         } else {
             $payload = (string)$response;

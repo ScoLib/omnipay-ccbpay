@@ -2,11 +2,13 @@
 
 namespace Omnipay\CCBPay\Responses;
 
-class CreateOrderResponse extends BaseAbstractResponse
+use Omnipay\Common\Message\RedirectResponseInterface;
+
+class CreateOrderResponse extends BaseAbstractResponse implements RedirectResponseInterface
 {
 
     /**
-     * @var CreateOrderRequest
+     * @var \Omnipay\CCBPay\Requests\CreateOrderRequest
      */
     protected $request;
 
@@ -15,7 +17,33 @@ class CreateOrderResponse extends BaseAbstractResponse
      */
     public function isSuccessful()
     {
-
+        return true;
     }
 
+    public function isRedirect()
+    {
+        return true;
+    }
+
+    public function getRedirectUrl()
+    {
+        return $this->request->getEndpoint();
+    }
+
+    /**
+     * Get the required redirect method (either GET or POST).
+     */
+    public function getRedirectMethod()
+    {
+        return 'POST';
+    }
+
+
+    /**
+     * Gets the redirect form data array, if the redirect method is POST.
+     */
+    public function getRedirectData()
+    {
+        return $this->getData();
+    }
 }

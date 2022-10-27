@@ -170,4 +170,16 @@ class Signer
 
         return $this;
     }
+
+    /**
+     * @param boolean $filter
+     *
+     * @return Signer
+     */
+    public function setFilter($filter)
+    {
+        $this->filter = $filter;
+
+        return $this;
+    }
 }
