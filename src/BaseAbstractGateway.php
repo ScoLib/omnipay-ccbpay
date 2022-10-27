@@ -75,9 +75,9 @@ abstract class BaseAbstractGateway extends AbstractGateway
     /**
      * @return mixed
      */
-    public function getPrivateKey()
+    public function getPublicKey()
     {
-        return $this->getParameter('private_key');
+        return $this->getParameter('public_key');
     }
 
 
@@ -86,9 +86,9 @@ abstract class BaseAbstractGateway extends AbstractGateway
      *
      * @return $this
      */
-    public function setPrivateKey($value)
+    public function setPublicKey($value)
     {
-        return $this->setParameter('private_key', $value);
+        return $this->setParameter('public_key', $value);
     }
 
     /**

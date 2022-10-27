@@ -61,7 +61,7 @@ class CreateOrderRequest extends BaseAbstractRequest
         $data['REMARK2'] = $this->getRemark2();
         $data['RETURNTYPE'] = $this->getReturntype();
         $data['TIMEOUT'] = $this->getTimeout();
-        $data['PUB'] = mb_substr($this->getPrivateKey(), -30);
+        $data['PUB'] = mb_substr($this->getPublicKey(), -30);
 
         $data['MAC'] = md5(http_build_query($data));
 

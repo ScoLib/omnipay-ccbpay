@@ -11,7 +11,7 @@ use Omnipay\Common\Message\AbstractRequest;
 abstract class BaseAbstractRequest extends AbstractRequest
 {
     protected $endpoint = 'https://ch5.dcep.ccb.com/CCBIS/ccbMain_XM';
-    private   $privateKey;
+    private   $publicKey;
 
     /**
      * @return array|mixed
@@ -74,19 +74,19 @@ abstract class BaseAbstractRequest extends AbstractRequest
     /**
      * @return mixed
      */
-    public function getPrivateKey()
+    public function getPublicKey()
     {
-        return $this->privateKey;
+        return $this->publicKey;
     }
 
     /**
-     * @param $privateKey
+     * @param $publicKey
      *
      * @return $this
      */
-    public function setPrivateKey($privateKey)
+    public function setPublicKey($publicKey)
     {
-        $this->privateKey = $privateKey;
+        $this->publicKey = $publicKey;
 
         return $this;
     }
