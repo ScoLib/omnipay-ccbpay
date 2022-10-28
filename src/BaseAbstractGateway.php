@@ -3,8 +3,8 @@
 namespace Omnipay\CCBPay;
 
 use Omnipay\CCBPay\Requests\CompletePurchaseRequest;
-use Omnipay\CCBPay\Requests\CreateOrderRequest;
-use Omnipay\CCBPay\Requests\QueryOrderRequest;
+use Omnipay\CCBPay\Requests\DCEPCreateOrderRequest;
+use Omnipay\CCBPay\Requests\DCEPQueryOrderRequest;
 use Omnipay\CCBPay\Requests\RefundOrderRequest;
 use Omnipay\Common\AbstractGateway;
 use Omnipay\Common\Exception\InvalidRequestException;
@@ -12,10 +12,6 @@ use Omnipay\Common\Message\AbstractRequest;
 
 abstract class BaseAbstractGateway extends AbstractGateway
 {
-    protected $endpoints = [
-        'production' => 'https://ch5.dcep.ccb.com/CCBIS/ccbMain_XM?CCB_IBSVersion=V6',
-        'test'       => 'http://128.196.119.53:8101/CCBIS/ccbMain_XM?CCB_IBSVersion=V6',
-    ];
 
     /**
      * @return mixed
@@ -92,62 +88,12 @@ abstract class BaseAbstractGateway extends AbstractGateway
     }
 
     /**
-     * @return $this
-     * @throws \Omnipay\Common\Exception\InvalidRequestException
-     */
-    public function production()
-    {
-        return $this->setEnvironment('production');
-    }
-
-
-    /**
-     * @param $value
-     *
-     * @return $this
-     * @throws InvalidRequestException
-     */
-    public function setEnvironment($value)
-    {
-        $env = strtolower($value);
-
-        if (!isset($this->endpoints[$env])) {
-            throw new InvalidRequestException('The environment is invalid');
-        }
-
-        $this->setEndpoint($this->endpoints[$env]);
-
-        return $this;
-    }
-
-
-    /**
-     * @param $value
-     *
-     * @return $this
-     */
-    public function setEndpoint($value)
-    {
-        return $this->setParameter('endpoint', $value);
-    }
-
-
-    /**
-     * @return $this
-     * @throws \Omnipay\Common\Exception\InvalidRequestException
-     */
-    public function test()
-    {
-        return $this->setEnvironment('test');
-    }
-
-    /**
      * @param array $parameters
-     * @return \Omnipay\CCBPay\Requests\CreateOrderRequest
+     * @return \Omnipay\CCBPay\Requests\DCEPCreateOrderRequest
      */
     public function purchase($parameters = array())
     {
-        return $this->createRequest(CreateOrderRequest::class, $parameters);
+        return $this->createRequest(DCEPCreateOrderRequest::class, $parameters);
     }
 
     /**
@@ -163,11 +109,11 @@ abstract class BaseAbstractGateway extends AbstractGateway
      *
      * @param array $parameters
      *
-     * @return \Omnipay\CCBPay\Requests\QueryOrderRequest
+     * @return \Omnipay\CCBPay\Requests\DCEPQueryOrderRequest
      */
     public function query($parameters = array())
     {
-        return $this->createRequest(QueryOrderRequest::class, $parameters);
+        return $this->createRequest(DCEPQueryOrderRequest::class, $parameters);
     }
 
     /**

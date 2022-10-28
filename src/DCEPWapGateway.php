@@ -2,13 +2,13 @@
 
 namespace Omnipay\CCBPay;
 
-class DECPWapGateway extends BaseAbstractGateway
+class DCEPWapGateway extends BaseAbstractGateway
 {
     /**
      * @inheritDoc
      */
     public function getName()
     {
-        return 'CCB DECP WAP Gateway';
+        return 'CCB DCEP WAP Gateway';
     }
 }

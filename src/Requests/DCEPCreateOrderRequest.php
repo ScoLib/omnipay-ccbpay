@@ -4,11 +4,12 @@
 namespace Omnipay\CCBPay\Requests;
 
 
-use Omnipay\CCBPay\Responses\CreateOrderResponse;
+use Omnipay\CCBPay\Responses\DCEPCreateOrderResponse;
 use Omnipay\Common\Exception\InvalidRequestException;
 
-class CreateOrderRequest extends BaseAbstractRequest
+class DCEPCreateOrderRequest extends BaseAbstractRequest
 {
+    protected $endpoint = 'https://ch5.dcep.ccb.com/CCBIS/ccbMain_XM';
 
     /**
      * @throws InvalidRequestException
@@ -71,20 +72,20 @@ class CreateOrderRequest extends BaseAbstractRequest
 
         $data['REMARK1'] = urlencode($data['REMARK1']);
         $data['REMARK2'] = urlencode($data['REMARK2']);
-        
+
         return $data;
     }
 
     /**
      * @param mixed $data
-     * @return \Omnipay\CCBPay\Responses\CreateOrderResponse|\Omnipay\Common\Message\ResponseInterface
+     * @return \Omnipay\CCBPay\Responses\DCEPCreateOrderResponse|\Omnipay\Common\Message\ResponseInterface
      * @throws \Exception
      */
     public function sendData($data)
     {
         $data = array_merge(['CCB_IBSVersion' => 'V6'], $data);
 
-        return $this->response = new CreateOrderResponse($this, $data);
+        return $this->response = new DCEPCreateOrderResponse($this, $data);
     }
 
     protected function setDefaults()

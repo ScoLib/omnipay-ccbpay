@@ -10,7 +10,7 @@ use Omnipay\Common\Message\AbstractRequest;
 
 abstract class BaseAbstractRequest extends AbstractRequest
 {
-    protected $endpoint = 'https://ch5.dcep.ccb.com/CCBIS/ccbMain_XM';
+    protected $endpoint;
     private   $publicKey;
 
     /**
@@ -18,11 +18,6 @@ abstract class BaseAbstractRequest extends AbstractRequest
      * @throws \Exception
      */
     public function getData()
-    {
-
-    }
-
-    protected function verify($signStr, $sign)
     {
 
     }
@@ -43,12 +38,7 @@ abstract class BaseAbstractRequest extends AbstractRequest
 
         $response = $this->httpClient->request('POST', $this->getEndpoint(), $headers, $body)->getBody();
 
-        if (stripos($response, '</html>')) {
-            $payload = ['html' => (string)$response];
-        } else {
-            $payload = (string)$response;
-        }
-        return $payload;
+        return json_decode($response, true);
     }
 
     /**

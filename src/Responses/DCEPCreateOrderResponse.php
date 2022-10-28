@@ -4,11 +4,11 @@ namespace Omnipay\CCBPay\Responses;
 
 use Omnipay\Common\Message\RedirectResponseInterface;
 
-class CreateOrderResponse extends BaseAbstractResponse implements RedirectResponseInterface
+class DCEPCreateOrderResponse extends BaseAbstractResponse implements RedirectResponseInterface
 {
 
     /**
-     * @var \Omnipay\CCBPay\Requests\CreateOrderRequest
+     * @var \Omnipay\CCBPay\Requests\DCEPCreateOrderRequest
      */
     protected $request;
 
